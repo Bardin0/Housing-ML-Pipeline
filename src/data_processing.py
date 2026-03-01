@@ -3,12 +3,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split 
 
 def load_data():
+    # This set is already cleaned, no need to do anything but load
+    # Features: ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']
     dataset = fetch_california_housing(as_frame=True)
     df = dataset.frame 
     return df
-
-def check_missing_values(df):
-    return df.isnull().sum()
 
 def scale_features(X_train, X_test):
     scaler = StandardScaler()
@@ -29,16 +28,12 @@ def split_data(df):
             )
 
 def preprocess_data():
+    '''
+    Load and split the data into test and training sets
+    '''
     df = load_data()
 
     X_train, X_test, y_train, y_test = split_data(df)
     X_train_scaled, X_test_scaled, scaler = scale_features(X_train,X_test)
 
     return X_train_scaled, X_test_scaled, y_train.values, y_test.values, scaler
-
-if __name__ == "__main__":
-    X_train, X_test, y_train, y_test, scaler = preprocess_data()
-
-    print("Train shape: ", X_train.shape)
-    print("Test shape: ", X_test.shape)
-    print("Train target shape: ", y_train.shape)
