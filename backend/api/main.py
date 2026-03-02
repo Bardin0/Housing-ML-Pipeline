@@ -19,4 +19,7 @@ def predict(data: HouseFeatures):
 
     prediction = model.predict(X_scaled)[0]
 
-    return {"prediction": float(prediction)}
+    return {
+            "prediction_raw": float(prediction),
+            "prediction_usd": float(prediction) * 100000
+            }
