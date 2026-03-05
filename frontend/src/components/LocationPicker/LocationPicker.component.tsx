@@ -1,0 +1,37 @@
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { useState } from "react";
+
+interface Props {
+  onLocationSelect: (lat: number, lng: number) => void;
+}
+
+function MapClickHandler({ onLocationSelect }: Props) {
+  const [position, setPosition] = useState<[number, number] | null>(null);
+
+  useMapEvents({
+    click(e) {
+      const { lat, lng } = e.latlng;
+      setPosition([lat, lng]);
+      onLocationSelect(lat, lng);
+    },
+  });
+
+  return position ? <Marker position={position} /> : null;
+}
+
+export default function LocationPicker({ onLocationSelect }: Props) {
+  return (
+    <MapContainer
+      center={[37.5, -122]}
+      zoom={6}
+      style={{ height: "400px", width: "100%" }}
+    >
+      <TileLayer
+        attribution="© OpenStreetMap contributors"
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+
+      <MapClickHandler onLocationSelect={onLocationSelect} />
+    </MapContainer>
+  );
+}

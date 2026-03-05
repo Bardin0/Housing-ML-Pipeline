@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { predictPrice } from "../../services/api";
 import { type PredictionRequest } from "../../types/prediction";
+import LocationPicker from "../LocationPicker/LocationPicker.component";
+
+import "./input_form.css";
 
 export default function InputForm() {
   const featureNames = [
@@ -36,8 +39,17 @@ export default function InputForm() {
     }
   };
 
+  const handleLocationSelect = (lat: number, lng: number) => {
+    const updated = [...features];
+
+    updated[6] = lat;
+    updated[7] = lng;
+
+    setFeatures(updated);
+  };
+
   return (
-    <div>
+    <div className="input-form-wrapper">
       {featureNames.map((name, index) => (
         <div key={index} style={{ marginBottom: "10px" }}>
           <label>{name}</label>
@@ -55,6 +67,7 @@ export default function InputForm() {
       {prediction !== null && (
         <p>Predicted price adjusted for inflation: ${prediction.toLocaleString()}</p>
       )}
+      <LocationPicker onLocationSelect={handleLocationSelect} />
     </div>
   );
 }
